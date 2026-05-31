@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HortiFrúti</title>
+
+    <!-- AdminLTE -->
+    <link rel="stylesheet" th:href="@{/adminlte/css/adminlte.min.css}">
+    <link rel="stylesheet" th:href="@{/adminlte/css/all.min.css}">
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <a href="/dashboard" class="brand-link">
+            <span class="brand-text">HortiFrúti</span>
+        </a>
+
+        <div class="sidebar">
+
+            <nav>
+                <ul class="nav nav-pills nav-sidebar flex-column">
+
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link">
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/familias" class="nav-link">
+                            <p>Famílias</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/fila" class="nav-link">
+                            <p>Fila</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/entregas" class="nav-link">
+                            <p>Entregas</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+        </div>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <div class="content-wrapper p-3">
+
+        <section class="content">
+
+            <div class="container-fluid">
+
+                <!-- CONTEÚDO DINÂMICO -->
+                <div th:fragment="content">
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<!-- JS -->
+<script th:src="@{/adminlte/js/adminlte.min.js}"></script>
+
+</body>
+</html>
