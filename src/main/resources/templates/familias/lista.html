@@ -1,0 +1,48 @@
+<h1>Famílias</h1>
+
+<a class="btn btn-primary mb-3" href="/familias/novo">
+    Nova Família
+</a>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Ações</th>
+    </tr>
+
+    <tr th:each="f : ${familias}">
+
+        <td th:text="${f.id}"></td>
+        <td th:text="${f.nomeCompleto}"></td>
+        <td th:text="${f.cpf}"></td>
+
+        <td>
+
+            <!-- BOTÃO EDITAR -->
+            <a class="btn btn-warning btn-sm"
+               th:href="@{'/familias/editar/' + ${f.id}}">
+                Editar
+            </a>
+
+            <!-- BOTÃO EXCLUIR -->
+            <a class="btn btn-danger btn-sm"
+               th:href="@{'/familias/deletar/' + ${f.id}}">
+                Excluir
+            </a>
+
+            <!-- BOTÃO DAR BAIXA (ENTREGA) -->
+            <a class="btn btn-success btn-sm"
+               th:href="@{'/entrega/registrar/' + ${f.id}}">
+                Dar Baixa
+            </a>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</section>

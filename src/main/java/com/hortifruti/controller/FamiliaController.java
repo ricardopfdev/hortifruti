@@ -1,11 +1,13 @@
 package com.hortifruti.controller;
 
+import com.hortifruti.entity.Familia;
 import com.hortifruti.service.FamiliaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/familias")
 public class FamiliaController {
 
     private final FamiliaService familiaService;
@@ -14,12 +16,38 @@ public class FamiliaController {
         this.familiaService = familiaService;
     }
 
-    @GetMapping("/familias")
-    public String listarFamilias(Model model) {
+    // LISTAR
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("familias", familiaService.listarTodas());
+        return "familias/lista";
+    }
 
-        model.addAttribute("familias",
-                familiaService.listarTodas());
+    // FORM NOVA FAMÍLIA
+    @GetMapping("/novo")
+    public String novo(Model model) {
+        model.addAttribute("familia", new Familia());
+        return "familias/form";
+    }
 
-        return "pages/familias";
+    // SALVAR
+    @PostMapping("/salvar")
+    public String salvar(@ModelAttribute Familia familia) {
+        familiaService.salvar(familia);
+        return "redirect:/familias";
+    }
+
+    // EDITAR
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("familia", familiaService.buscarPorId(id));
+        return "familias/form";
+    }
+
+    // DELETAR
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Long id) {
+        familiaService.deletar(id);
+        return "redirect:/familias";
     }
 }
