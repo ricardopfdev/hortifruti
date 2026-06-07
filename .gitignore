@@ -1,5 +1,9 @@
 HELP.md
 target/
+
+# Credenciais locais (nunca versionar)
+src/main/resources/application-local.properties
+application-local.properties
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
