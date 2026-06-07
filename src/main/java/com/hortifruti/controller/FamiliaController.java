@@ -1,6 +1,7 @@
 package com.hortifruti.controller;
 
 import com.hortifruti.entity.Familia;
+import com.hortifruti.model.FiltroFamilia;
 import com.hortifruti.service.EntregaService;
 import com.hortifruti.service.FamiliaService;
 import jakarta.validation.Valid;
@@ -23,8 +24,11 @@ public class FamiliaController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("familias", familiaService.listarTodas());
+    public String listar(FiltroFamilia filtro, Model model) {
+        var pagina = familiaService.listar(filtro);
+        model.addAttribute("filtro", filtro);
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("familias", pagina.getContent());
         return "familias/lista";
     }
 

@@ -1,8 +1,14 @@
 package com.hortifruti.service;
 
 import com.hortifruti.entity.Familia;
+import com.hortifruti.model.FiltroFamilia;
 import com.hortifruti.model.StatusFila;
+import com.hortifruti.repository.EntregaRepository;
 import com.hortifruti.repository.FamiliaRepository;
+import com.hortifruti.validation.CpfUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +19,29 @@ import java.util.List;
 public class FamiliaService {
 
     private final FamiliaRepository familiaRepository;
+    private final EntregaRepository entregaRepository;
 
-    public FamiliaService(FamiliaRepository familiaRepository) {
+    public FamiliaService(FamiliaRepository familiaRepository, EntregaRepository entregaRepository) {
         this.familiaRepository = familiaRepository;
+        this.entregaRepository = entregaRepository;
     }
 
     public List<Familia> listarTodas() {
         return familiaRepository.findAll();
+    }
+
+    public Page<Familia> listar(FiltroFamilia filtro) {
+        PageRequest pageable = PageRequest.of(
+                filtro.getPage(),
+                filtro.getSize(),
+                Sort.by("nomeCompleto").ascending()
+        );
+        return familiaRepository.buscarComFiltros(
+                filtro.termoBusca(),
+                filtro.statusFilaFiltro(),
+                filtro.ativaFiltro(),
+                pageable
+        );
     }
 
     public Familia buscarPorId(Long id) {
@@ -59,6 +81,10 @@ public class FamiliaService {
     public void deletar(Long id) {
         if (!familiaRepository.existsById(id)) {
             throw new IllegalArgumentException("Família não encontrada");
+        }
+        if (entregaRepository.existsByFamiliaId(id)) {
+            throw new IllegalArgumentException(
+                    "Não é possível excluir família com entregas registradas. Desative-a em vez de excluir.");
         }
         familiaRepository.deleteById(id);
     }
@@ -106,7 +132,10 @@ public class FamiliaService {
     }
 
     private void validarCpfDuplicado(Familia familia) {
-        String cpf = familia.getCpf() != null ? familia.getCpf().trim() : "";
+        String cpf = CpfUtil.normalizar(familia.getCpf());
+        if (!CpfUtil.isValid(cpf)) {
+            throw new IllegalArgumentException("CPF inválido");
+        }
         Long id = familia.getId() != null ? familia.getId() : -1L;
         if (familiaRepository.existsByCpfAndIdNot(cpf, id)) {
             throw new IllegalArgumentException("CPF já cadastrado para outra família");

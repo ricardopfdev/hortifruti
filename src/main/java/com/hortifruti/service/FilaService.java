@@ -77,4 +77,22 @@ public class FilaService {
 
         return Math.max(maxEntrega, maxFila) + 1;
     }
+
+    @Transactional
+    public int reiniciarDistribuicao() {
+        List<Familia> familias = familiaRepository.findAll();
+        int reiniciadas = 0;
+
+        for (Familia familia : familias) {
+            if (!Boolean.TRUE.equals(familia.getAtiva())) {
+                continue;
+            }
+            familia.setStatusFila(StatusFila.NA_FILA);
+            familia.setNumeroSenha(null);
+            reiniciadas++;
+        }
+
+        familiaRepository.saveAll(familias);
+        return reiniciadas;
+    }
 }

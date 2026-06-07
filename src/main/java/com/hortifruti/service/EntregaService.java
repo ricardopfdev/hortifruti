@@ -2,9 +2,13 @@ package com.hortifruti.service;
 
 import com.hortifruti.entity.Entrega;
 import com.hortifruti.entity.Familia;
+import com.hortifruti.model.FiltroEntrega;
 import com.hortifruti.model.StatusFila;
 import com.hortifruti.repository.EntregaRepository;
 import com.hortifruti.repository.FamiliaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,26 @@ public class EntregaService {
 
     public List<Entrega> listarTodas() {
         return entregaRepository.findAllByOrderByDataEntregaDesc();
+    }
+
+    public Page<Entrega> listar(FiltroEntrega filtro) {
+        PageRequest pageable = PageRequest.of(
+                filtro.getPage(),
+                filtro.getSize(),
+                Sort.by("dataEntrega").descending()
+        );
+
+        LocalDateTime dataInicio = filtro.getDataInicio() != null
+                ? filtro.getDataInicio().atStartOfDay()
+                : null;
+        LocalDateTime dataFim = filtro.getDataFim() != null
+                ? filtro.getDataFim().atTime(LocalTime.MAX)
+                : null;
+
+        Integer senha = filtro.senhaFiltro();
+        String busca = senha != null ? "" : filtro.termoBusca();
+
+        return entregaRepository.buscarComFiltros(busca, senha, dataInicio, dataFim, pageable);
     }
 
     public long entregasHoje() {

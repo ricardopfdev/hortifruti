@@ -2,6 +2,7 @@ HELP.md
 target/
 
 # Credenciais locais (nunca versionar)
+env.local
 src/main/resources/application-local.properties
 application-local.properties
 

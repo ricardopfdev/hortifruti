@@ -78,4 +78,16 @@ public class FilaController {
         }
         return "redirect:/fila/baixa";
     }
+
+    @PostMapping("/reiniciar")
+    public String reiniciar(RedirectAttributes redirectAttributes) {
+        try {
+            int total = filaService.reiniciarDistribuicao();
+            redirectAttributes.addFlashAttribute("sucesso",
+                    "Nova distribuição iniciada. " + total + " família(s) ativa(s) retornaram à fila.");
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("erro", ex.getMessage());
+        }
+        return "redirect:/fila";
+    }
 }

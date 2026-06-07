@@ -3,6 +3,7 @@ package com.hortifruti.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import com.hortifruti.validation.CpfValid;
 import java.time.LocalDate;
 
 @Entity
@@ -18,6 +19,7 @@ public class Familia {
     private String nomeCompleto;
 
     @NotBlank(message = "CPF é obrigatório")
+    @CpfValid
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 

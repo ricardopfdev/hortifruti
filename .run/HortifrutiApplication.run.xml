@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="HortifrutiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" />
+    <module name="hortifruti" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hortifruti.HortifrutiApplication" />
+    <extension name="net.ashald.envfile">
+      <option name="ENABLED" value="true" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+      <option name="IS_IGNORE_MISSING_FILES" value="true" />
+      <option name="ENABLED_ENVFILES">
+        <set>
+          <option value="$PROJECT_DIR$/env.local" />
+        </set>
+      </option>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

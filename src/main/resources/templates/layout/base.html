@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:fragment="layout(title, menu, content)">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +16,7 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
           crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/adminlte/css/adminlte.min.css}">
+    <link rel="stylesheet" th:href="@{/adminlte/css/adminlte.css}">
 </head>
 <body class="layout-fixed sidebar-expand-lg sidebar-mini bg-body-tertiary">
 
@@ -31,6 +32,20 @@
                 </li>
                 <li class="nav-item d-none d-md-block">
                     <span class="nav-link fw-semibold">Sistema HortiFrúti</span>
+                </li>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item d-none d-md-block">
+                    <span class="nav-link text-secondary">
+                        <i class="bi bi-person-circle"></i>
+                        <span sec:authentication="name">usuário</span>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link nav-link text-danger">
+                            <i class="bi bi-box-arrow-right"></i> Sair
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -53,7 +68,7 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/familias}" class="nav-link"
                            th:classappend="${menu == 'familias'} ? ' active' : ''">
                             <i class="nav-icon bi bi-people"></i>
@@ -133,7 +148,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
-<script th:src="@{/adminlte/js/adminlte.min.js}"></script>
+<script th:src="@{/adminlte/js/adminlte.js}"></script>
 
 </body>
 </html>

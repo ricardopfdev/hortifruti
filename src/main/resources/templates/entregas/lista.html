@@ -12,6 +12,47 @@
         </div>
     </div>
 
+    <div class="card mb-3">
+        <div class="card-body">
+            <form th:action="@{/entregas}" method="get" class="row g-3 align-items-end">
+                <input type="hidden" name="page" value="0">
+                <div class="col-md-4">
+                    <label class="form-label">Buscar</label>
+                    <input type="text" class="form-control" name="busca" th:value="${filtro.busca}"
+                           placeholder="Nome, CPF ou senha">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Data início</label>
+                    <input type="date" class="form-control" name="dataInicio"
+                           th:value="${filtro.dataInicio}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Data fim</label>
+                    <input type="date" class="form-control" name="dataFim"
+                           th:value="${filtro.dataFim}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Por pág.</label>
+                    <select class="form-select" name="size">
+                        <option value="10" th:selected="${filtro.size == 10}">10</option>
+                        <option value="20" th:selected="${filtro.size == 20}">20</option>
+                        <option value="50" th:selected="${filtro.size == 50}">50</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                    <a th:href="@{/entregas}" class="btn btn-outline-secondary" title="Limpar filtros">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/paginacao :: info(${pagina})}"></div>
+
     <div class="card">
         <div class="card-body p-0">
             <table class="table table-striped mb-0">
@@ -37,11 +78,14 @@
                 </tr>
                 <tr th:if="${#lists.isEmpty(entregas)}">
                     <td colspan="5" class="text-center text-muted py-4">
-                        Nenhuma entrega registrada.
+                        Nenhuma entrega encontrada.
                     </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="card-footer">
+            <div th:replace="~{fragments/paginacao :: entregas(${pagina}, ${filtro})}"></div>
         </div>
     </div>
 

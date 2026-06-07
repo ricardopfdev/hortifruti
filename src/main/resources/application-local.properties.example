@@ -1,6 +1,8 @@
-# Copie este arquivo para application-local.properties e preencha com seus dados.
-# O arquivo application-local.properties NÃO é enviado ao GitHub.
-
 spring.datasource.url=jdbc:postgresql://localhost:5432/hortifruti
 spring.datasource.username=postgres
 spring.datasource.password=SUA_SENHA_AQUI
+
+hortifruti.security.admin.username=admin
+hortifruti.security.admin.password=admin123
+hortifruti.security.atendente.username=atendente
+hortifruti.security.atendente.password=atendente123

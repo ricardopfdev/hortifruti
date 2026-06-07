@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{layout/base :: layout('Fila de Atendimento', 'fila', ~{::section})}">
 <body>
 <section>
@@ -24,13 +25,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 d-flex align-items-center">
-            <a th:href="@{/fila/painel}" class="btn btn-outline-primary me-2" target="_blank">
+        <div class="col-md-4 d-flex align-items-center flex-wrap gap-2">
+            <a th:href="@{/fila/painel}" class="btn btn-outline-primary" target="_blank">
                 <i class="bi bi-display"></i> Painel
             </a>
             <a th:href="@{/fila/baixa}" class="btn btn-success">
                 <i class="bi bi-check2-square"></i> Baixa
             </a>
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/fila/reiniciar}" method="post"
+                  onsubmit="return confirm('Iniciar nova distribuição? Todas as famílias ativas voltarão à fila e as senhas serão limpas.');">
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="bi bi-arrow-repeat"></i> Nova Distribuição
+                </button>
+            </form>
         </div>
     </div>
 

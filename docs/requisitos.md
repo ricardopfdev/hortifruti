@@ -11,3 +11,5 @@ RF04 - Registrar entregas
 RF05 - Controlar fila de atendimento
 
 RF06 - Exibir dashboard
+
+RF07 - Autenticar usuários (Administrador e Atendente)

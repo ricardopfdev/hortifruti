@@ -3,11 +3,58 @@
       th:replace="~{layout/base :: layout('Famílias', 'familias', ~{::section})}">
 <body>
 <section>
-    <div class="mb-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <a th:href="@{/familias/novo}" class="btn btn-success">
             <i class="bi bi-plus-lg"></i> Nova Família
         </a>
     </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form th:action="@{/familias}" method="get" class="row g-3 align-items-end">
+                <input type="hidden" name="page" value="0">
+                <div class="col-md-4">
+                    <label class="form-label">Buscar</label>
+                    <input type="text" class="form-control" name="busca" th:value="${filtro.busca}"
+                           placeholder="Nome ou CPF">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Status na fila</label>
+                    <select class="form-select" name="statusFila">
+                        <option value="" th:selected="${filtro.statusFila == null or filtro.statusFila == ''}">Todos</option>
+                        <option value="NA_FILA" th:selected="${filtro.statusFila == 'NA_FILA'}">Na fila</option>
+                        <option value="ATENDIDO" th:selected="${filtro.statusFila == 'ATENDIDO'}">Atendido</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Ativa</label>
+                    <select class="form-select" name="ativa">
+                        <option value="" th:selected="${filtro.ativa == null or filtro.ativa == ''}">Todas</option>
+                        <option value="true" th:selected="${filtro.ativa == 'true'}">Sim</option>
+                        <option value="false" th:selected="${filtro.ativa == 'false'}">Não</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label class="form-label">Por pág.</label>
+                    <select class="form-select" name="size">
+                        <option value="10" th:selected="${filtro.size == 10}">10</option>
+                        <option value="20" th:selected="${filtro.size == 20}">20</option>
+                        <option value="50" th:selected="${filtro.size == 50}">50</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                    <a th:href="@{/familias}" class="btn btn-outline-secondary" title="Limpar filtros">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/paginacao :: info(${pagina})}"></div>
 
     <div class="card">
         <div class="card-body p-0">
@@ -65,11 +112,14 @@
                 </tr>
                 <tr th:if="${#lists.isEmpty(familias)}">
                     <td colspan="8" class="text-center text-muted py-4">
-                        Nenhuma família cadastrada.
+                        Nenhuma família encontrada.
                     </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="card-footer">
+            <div th:replace="~{fragments/paginacao :: familias(${pagina}, ${filtro})}"></div>
         </div>
     </div>
 </section>

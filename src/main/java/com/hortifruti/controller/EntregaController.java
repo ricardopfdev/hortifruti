@@ -1,5 +1,6 @@
 package com.hortifruti.controller;
 
+import com.hortifruti.model.FiltroEntrega;
 import com.hortifruti.service.EntregaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,11 @@ public class EntregaController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("entregas", entregaService.listarTodas());
+    public String listar(FiltroEntrega filtro, Model model) {
+        var pagina = entregaService.listar(filtro);
+        model.addAttribute("filtro", filtro);
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("entregas", pagina.getContent());
         model.addAttribute("entregasHoje", entregaService.entregasHoje());
         return "entregas/lista";
     }

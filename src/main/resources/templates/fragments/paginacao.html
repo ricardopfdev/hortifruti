@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="info(pagina)" class="text-muted small mb-2"
+     th:text="'Exibindo ' + ${pagina.numberOfElements} + ' de ' + ${pagina.totalElements} + ' registro(s)'">
+</div>
+
+<nav th:fragment="familias(pagina, filtro)" th:if="${pagina.totalPages > 1}" aria-label="Paginação de famílias">
+    <ul class="pagination pagination-sm mb-0 justify-content-end">
+        <li class="page-item" th:classappend="${pagina.first} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/familias(page=${pagina.number - 1}, size=${pagina.size}, busca=${filtro.busca}, statusFila=${filtro.statusFila}, ativa=${filtro.ativa})}">
+                Anterior
+            </a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link"
+                  th:text="${pagina.number + 1} + ' / ' + ${pagina.totalPages}">1 / 1</span>
+        </li>
+        <li class="page-item" th:classappend="${pagina.last} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/familias(page=${pagina.number + 1}, size=${pagina.size}, busca=${filtro.busca}, statusFila=${filtro.statusFila}, ativa=${filtro.ativa})}">
+                Próxima
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<nav th:fragment="entregas(pagina, filtro)" th:if="${pagina.totalPages > 1}" aria-label="Paginação de entregas">
+    <ul class="pagination pagination-sm mb-0 justify-content-end">
+        <li class="page-item" th:classappend="${pagina.first} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/entregas(page=${pagina.number - 1}, size=${pagina.size}, busca=${filtro.busca}, dataInicio=${filtro.dataInicio}, dataFim=${filtro.dataFim})}">
+                Anterior
+            </a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link"
+                  th:text="${pagina.number + 1} + ' / ' + ${pagina.totalPages}">1 / 1</span>
+        </li>
+        <li class="page-item" th:classappend="${pagina.last} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/entregas(page=${pagina.number + 1}, size=${pagina.size}, busca=${filtro.busca}, dataInicio=${filtro.dataInicio}, dataFim=${filtro.dataFim})}">
+                Próxima
+            </a>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>
