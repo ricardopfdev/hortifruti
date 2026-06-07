@@ -1,7 +1,8 @@
 package com.hortifruti.entity;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -12,23 +13,36 @@ public class Familia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nome completo é obrigatório")
     @Column(nullable = false)
     private String nomeCompleto;
 
+    @NotBlank(message = "CPF é obrigatório")
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
+    @NotBlank(message = "Telefone é obrigatório")
     @Column(nullable = false)
     private String telefone;
 
+    @NotBlank(message = "Endereço é obrigatório")
     @Column(nullable = false)
     private String endereco;
 
+    @Min(value = 1, message = "A família deve ter pelo menos 1 morador")
     @Column(nullable = false)
     private Integer quantidadeMoradores;
 
     @Column(nullable = false)
-    private String situacao;
+    private Boolean ativa = true;
+
+    @Column(nullable = false)
+    private String statusFila;
+
+    @Column(nullable = false)
+    private Integer prioridade;
+
+    private Integer numeroSenha;
 
     @Column(nullable = false)
     private LocalDate dataCadastro;
@@ -84,12 +98,36 @@ public class Familia {
         this.quantidadeMoradores = quantidadeMoradores;
     }
 
-    public String getSituacao() {
-        return situacao;
+    public Boolean getAtiva() {
+        return ativa;
     }
 
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public String getStatusFila() {
+        return statusFila;
+    }
+
+    public void setStatusFila(String statusFila) {
+        this.statusFila = statusFila;
+    }
+
+    public Integer getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(Integer prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public Integer getNumeroSenha() {
+        return numeroSenha;
+    }
+
+    public void setNumeroSenha(Integer numeroSenha) {
+        this.numeroSenha = numeroSenha;
     }
 
     public LocalDate getDataCadastro() {

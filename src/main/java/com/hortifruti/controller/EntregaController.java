@@ -1,30 +1,25 @@
 package com.hortifruti.controller;
 
-import com.hortifruti.entity.Familia;
-import com.hortifruti.repository.FamiliaRepository;
 import com.hortifruti.service.EntregaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/entrega")
+@RequestMapping("/entregas")
 public class EntregaController {
 
-    @Autowired
-    private FamiliaRepository familiaRepository;
+    private final EntregaService entregaService;
 
-    @Autowired
-    private EntregaService entregaService;
+    public EntregaController(EntregaService entregaService) {
+        this.entregaService = entregaService;
+    }
 
-    @GetMapping("/registrar/{id}")
-    public String registrar(@PathVariable Long id) {
-
-        Familia familia = familiaRepository.findById(id)
-                .orElseThrow();
-
-        entregaService.registrarEntrega(familia);
-
-        return "redirect:/familias";
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("entregas", entregaService.listarTodas());
+        model.addAttribute("entregasHoje", entregaService.entregasHoje());
+        return "entregas/lista";
     }
 }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Dashboard', 'dashboard', ~{::section})}">
+<body>
+<section>
+    <div class="row">
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box text-bg-primary">
+                <div class="inner">
+                    <h3 th:text="${totalFamilias}">0</h3>
+                    <p>Total de Famílias</p>
+                </div>
+                <i class="small-box-icon bi bi-people"></i>
+                <a th:href="@{/familias}" class="small-box-footer link-light">
+                    Ver famílias <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box text-bg-warning">
+                <div class="inner">
+                    <h3 th:text="${familiasNaFila}">0</h3>
+                    <p>Na Fila</p>
+                </div>
+                <i class="small-box-icon bi bi-hourglass-split"></i>
+                <a th:href="@{/fila}" class="small-box-footer link-dark">
+                    Ver fila <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box text-bg-success">
+                <div class="inner">
+                    <h3 th:text="${familiasAtendidas}">0</h3>
+                    <p>Atendidas</p>
+                </div>
+                <i class="small-box-icon bi bi-check-circle"></i>
+                <a th:href="@{/entregas}" class="small-box-footer link-light">
+                    Ver entregas <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+            <div class="small-box text-bg-info">
+                <div class="inner">
+                    <h3 th:text="${entregasHoje}">0</h3>
+                    <p>Entregas Hoje</p>
+                </div>
+                <i class="small-box-icon bi bi-calendar-check"></i>
+                <a th:href="@{/fila/baixa}" class="small-box-footer link-light">
+                    Dar baixa <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Próximas na Fila</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                        <tr>
+                            <th>Prioridade</th>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Senha</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="f : ${filaTop5}">
+                            <td th:text="${f.prioridade}"></td>
+                            <td th:text="${f.nomeCompleto}"></td>
+                            <td th:text="${f.cpf}"></td>
+                            <td>
+                                <span th:if="${f.numeroSenha != null}"
+                                      class="badge text-bg-primary"
+                                      th:text="${T(String).format('%03d', f.numeroSenha)}"></span>
+                                <span th:if="${f.numeroSenha == null}" class="text-muted">—</span>
+                            </td>
+                            <td>
+                                <span class="badge text-bg-warning">NA_FILA</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(filaTop5)}">
+                            <td colspan="5" class="text-center text-muted py-3">
+                                Nenhuma família na fila no momento.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Resumo do Dia</h3>
+                </div>
+                <div class="card-body">
+                    <p><i class="bi bi-person-plus me-2"></i>
+                        Cadastros hoje: <strong th:text="${familiasHoje}">0</strong></p>
+                    <p><i class="bi bi-box-seam me-2"></i>
+                        Entregas hoje: <strong th:text="${entregasHoje}">0</strong></p>
+                    <hr>
+                    <a th:href="@{/fila/painel}" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="bi bi-display"></i> Abrir Painel de Senhas
+                    </a>
+                    <a th:href="@{/fila/baixa}" class="btn btn-success w-100">
+                        <i class="bi bi-ticket-perforated"></i> Baixa por Senha
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

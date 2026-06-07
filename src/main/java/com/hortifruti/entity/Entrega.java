@@ -1,6 +1,7 @@
 package com.hortifruti.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,17 +12,23 @@ public class Entrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "familia_id", nullable = false)
     private Familia familia;
 
+    @Column(nullable = false)
+    private Integer senha;
+
+    @Column(nullable = false)
     private LocalDateTime dataEntrega;
 
     public Entrega() {
         this.dataEntrega = LocalDateTime.now();
     }
 
-    public Entrega(Familia familia) {
+    public Entrega(Familia familia, Integer senha) {
         this.familia = familia;
+        this.senha = senha;
         this.dataEntrega = LocalDateTime.now();
     }
 
@@ -35,6 +42,14 @@ public class Entrega {
 
     public void setFamilia(Familia familia) {
         this.familia = familia;
+    }
+
+    public Integer getSenha() {
+        return senha;
+    }
+
+    public void setSenha(Integer senha) {
+        this.senha = senha;
     }
 
     public LocalDateTime getDataEntrega() {

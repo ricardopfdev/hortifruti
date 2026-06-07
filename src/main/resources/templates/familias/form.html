@@ -1,81 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(${familia.id != null} ? 'Editar Família' : 'Nova Família', 'familias', ~{::section})}">
+<body>
+<section>
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/familias/salvar}" th:object="${familia}" method="post">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Família</title>
+                <input type="hidden" th:field="*{id}"/>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-</head>
-
-<body class="hold-transition sidebar-mini">
-
-<div class="wrapper">
-
-    <div class="content-wrapper p-4">
-
-        <section class="content-header">
-            <h1>Cadastro de Família</h1>
-        </section>
-
-        <section class="content">
-
-            <div class="card">
-                <div class="card-body">
-
-                    <form th:action="@{/familias/salvar}" th:object="${familia}" method="post">
-
-                        <input type="hidden" th:field="*{id}" />
-
-                        <div class="form-group">
-                            <label>Nome Completo</label>
-                            <input type="text" class="form-control" th:field="*{nomeCompleto}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>CPF</label>
-                            <input type="text" class="form-control" th:field="*{cpf}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Telefone</label>
-                            <input type="text" class="form-control" th:field="*{telefone}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Endereço</label>
-                            <input type="text" class="form-control" th:field="*{endereco}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Quantidade de Moradores</label>
-                            <input type="number" class="form-control" th:field="*{quantidadeMoradores}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Situação</label>
-                            <input type="text" class="form-control" th:field="*{situacao}">
-                        </div>
-
-                        <button type="submit" class="btn btn-success">
-                            Salvar
-                        </button>
-
-                        <a href="/familias" class="btn btn-secondary">
-                            Voltar
-                        </a>
-
-                    </form>
-
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Nome Completo *</label>
+                        <input type="text" class="form-control" th:field="*{nomeCompleto}"
+                               th:classappend="${#fields.hasErrors('nomeCompleto')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{nomeCompleto}"></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">CPF * (somente números)</label>
+                        <input type="text" class="form-control" th:field="*{cpf}" maxlength="11"
+                               th:classappend="${#fields.hasErrors('cpf')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{cpf}"></div>
+                    </div>
                 </div>
-            </div>
 
-        </section>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Telefone *</label>
+                        <input type="text" class="form-control" th:field="*{telefone}"
+                               th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{telefone}"></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Quantidade de Moradores *</label>
+                        <input type="number" class="form-control" th:field="*{quantidadeMoradores}" min="1"
+                               th:classappend="${#fields.hasErrors('quantidadeMoradores')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{quantidadeMoradores}"></div>
+                    </div>
+                    <div class="col-md-4 mb-3 d-flex align-items-end">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" th:field="*{ativa}" id="ativa">
+                            <label class="form-check-label" for="ativa">Família ativa (pode receber alimentos)</label>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Endereço *</label>
+                    <input type="text" class="form-control" th:field="*{endereco}"
+                           th:classappend="${#fields.hasErrors('endereco')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{endereco}"></div>
+                </div>
+
+                <div th:if="${familia.id != null}" class="alert alert-info">
+                    <small>
+                        Status na fila: <strong th:text="${familia.statusFila}"></strong> |
+                        Prioridade: <strong th:text="${familia.prioridade}"></strong>
+                        <span th:if="${familia.numeroSenha != null}">
+                            | Senha: <strong th:text="${T(String).format('%03d', familia.numeroSenha)}"></strong>
+                        </span>
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Salvar
+                </button>
+                <a th:href="@{/familias}" class="btn btn-secondary">Cancelar</a>
+
+            </form>
+        </div>
     </div>
-
-</div>
-
+</section>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Entregas', 'entregas', ~{::section})}">
+<body>
+<section>
+
+    <div class="info-box mb-3">
+        <span class="info-box-icon text-bg-success"><i class="bi bi-calendar-check"></i></span>
+        <div class="info-box-content">
+            <span class="info-box-text">Entregas realizadas hoje</span>
+            <span class="info-box-number" th:text="${entregasHoje}">0</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Senha</th>
+                    <th>Família</th>
+                    <th>CPF</th>
+                    <th>Data/Hora</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="e : ${entregas}">
+                    <td th:text="${e.id}"></td>
+                    <td>
+                        <span class="badge text-bg-primary"
+                              th:text="${T(String).format('%03d', e.senha)}"></span>
+                    </td>
+                    <td th:text="${e.familia.nomeCompleto}"></td>
+                    <td th:text="${e.familia.cpf}"></td>
+                    <td th:text="${#temporals.format(e.dataEntrega, 'dd/MM/yyyy HH:mm')}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(entregas)}">
+                    <td colspan="5" class="text-center text-muted py-4">
+                        Nenhuma entrega registrada.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
