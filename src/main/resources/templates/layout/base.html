@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title, menu, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | HortiFrúti'">HortiFrúti</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/adminlte/css/adminlte.min.css}">
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-mini bg-body-tertiary">
+
+<div class="app-wrapper">
+
+    <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                        <i class="bi bi-list"></i>
+                    </a>
+                </li>
+                <li class="nav-item d-none d-md-block">
+                    <span class="nav-link fw-semibold">Sistema HortiFrúti</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+            <a th:href="@{/dashboard}" class="brand-link">
+                <i class="bi bi-flower1 brand-image fs-4 ms-2"></i>
+                <span class="brand-text fw-light">HortiFrúti</span>
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <nav class="mt-2">
+                <ul class="nav sidebar-menu flex-column" role="navigation">
+                    <li class="nav-item">
+                        <a th:href="@{/dashboard}" class="nav-link"
+                           th:classappend="${menu == 'dashboard'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-speedometer"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/familias}" class="nav-link"
+                           th:classappend="${menu == 'familias'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-people"></i>
+                            <p>Famílias</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/fila}" class="nav-link"
+                           th:classappend="${menu == 'fila'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-list-ol"></i>
+                            <p>Fila de Atendimento</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/fila/painel}" class="nav-link"
+                           th:classappend="${menu == 'painel'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-display"></i>
+                            <p>Painel de Senhas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/fila/baixa}" class="nav-link"
+                           th:classappend="${menu == 'baixa'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-ticket-perforated"></i>
+                            <p>Baixa por Senha</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/entregas}" class="nav-link"
+                           th:classappend="${menu == 'entregas'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-box-seam"></i>
+                            <p>Entregas</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="mb-0" th:text="${title}">Título</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-content">
+            <div class="container-fluid">
+
+                <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${sucesso}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${erro}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:replace="${content}">Conteúdo</div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <strong>HortiFrúti</strong> — Controle de Famílias e Distribuição de Alimentos
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script th:src="@{/adminlte/js/adminlte.min.js}"></script>
+
+</body>
+</html>

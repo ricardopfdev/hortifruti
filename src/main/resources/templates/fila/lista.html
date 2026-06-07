@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Fila de Atendimento', 'fila', ~{::section})}">
+<body>
+<section>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon text-bg-warning"><i class="bi bi-hourglass-split"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Famílias na Fila</span>
+                    <span class="info-box-number" th:text="${totalFila}">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon text-bg-primary"><i class="bi bi-ticket-perforated"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Próxima Senha</span>
+                    <span class="info-box-number"
+                          th:text="${T(String).format('%03d', proximaSenha)}">001</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <a th:href="@{/fila/painel}" class="btn btn-outline-primary me-2" target="_blank">
+                <i class="bi bi-display"></i> Painel
+            </a>
+            <a th:href="@{/fila/baixa}" class="btn btn-success">
+                <i class="bi bi-check2-square"></i> Baixa
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3" th:each="f : ${familias}">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong th:text="${f.nomeCompleto}"></strong>
+                    <span class="badge text-bg-secondary" th:text="'#' + ${f.prioridade}"></span>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><b>CPF:</b> <span th:text="${f.cpf}"></span></p>
+                    <p class="mb-1"><b>Moradores:</b> <span th:text="${f.quantidadeMoradores}"></span></p>
+                    <p class="mb-2">
+                        <b>Senha:</b>
+                        <span th:if="${f.numeroSenha != null}"
+                              class="badge text-bg-primary fs-5"
+                              th:text="${T(String).format('%03d', f.numeroSenha)}"></span>
+                        <span th:if="${f.numeroSenha == null}" class="text-muted">Não gerada</span>
+                    </p>
+                    <span th:if="${f.statusFila == 'NA_FILA'}" class="badge text-bg-warning">Na fila</span>
+                    <span th:unless="${f.ativa}" class="badge text-bg-secondary">Inativa</span>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <form th:if="${f.numeroSenha == null and f.ativa}"
+                          th:action="@{'/fila/gerar-senha/' + ${f.id}}" method="post" class="flex-fill">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                            <i class="bi bi-ticket"></i> Gerar Senha
+                        </button>
+                    </form>
+                    <form th:if="${f.numeroSenha != null}"
+                          th:action="@{'/fila/atender/' + ${f.id}}" method="post" class="flex-fill"
+                          onsubmit="return confirm('Confirmar entrega desta família?');">
+                        <button type="submit" class="btn btn-success btn-sm w-100">
+                            <i class="bi bi-check-lg"></i> Atender
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" th:if="${#lists.isEmpty(familias)}">
+            <div class="alert alert-info mb-0">
+                Nenhuma família aguardando na fila.
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
