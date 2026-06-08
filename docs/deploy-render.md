@@ -44,6 +44,10 @@ Anote em **Connections** (Internal): Host, Port, Database, User, Password.
 
 ### 3. Variáveis de ambiente
 
+**Forma mais fácil:** no Web Service, clique em **Environment** → **Add from database** → selecione o Postgres. O Render adiciona `DATABASE_URL` automaticamente.
+
+Ou configure manualmente:
+
 Em **Environment** do Web Service:
 
 | Variável | Valor |
@@ -83,6 +87,7 @@ Em **Environment** do Web Service:
 | App não sobe | Logs → Runtime; confira `DB_*` e senha Postgres |
 | 502 / timeout | Cold start ou aumente o plano |
 | Login falha | Confira `HORTIFRUTI_ADMIN_PASSWORD` |
+| `jdbcUrl, jdbc:postgresql://${DB_HOST}...` | Banco não vinculado — use **Add from database** ou defina `DB_HOST`, `DB_PORT`, `DB_NAME` |
 
 ## Arquivos de deploy
 
