@@ -12,6 +12,18 @@ public final class CpfUtil {
         return cpf.replaceAll("\\D", "");
     }
 
+    public static String formatar(String cpf) {
+        String digits = normalizar(cpf);
+        if (digits.length() != 11) {
+            return cpf != null ? cpf : "";
+        }
+        return String.format("%s.%s.%s-%s",
+                digits.substring(0, 3),
+                digits.substring(3, 6),
+                digits.substring(6, 9),
+                digits.substring(9, 11));
+    }
+
     public static boolean isValid(String cpf) {
         String digits = normalizar(cpf);
 

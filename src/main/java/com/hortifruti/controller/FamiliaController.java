@@ -4,6 +4,9 @@ import com.hortifruti.entity.Familia;
 import com.hortifruti.model.FiltroFamilia;
 import com.hortifruti.service.EntregaService;
 import com.hortifruti.service.FamiliaService;
+import com.hortifruti.service.FilaService;
+import com.hortifruti.service.UsuarioService;
+import com.hortifruti.validation.CpfUtil;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +20,17 @@ public class FamiliaController {
 
     private final FamiliaService familiaService;
     private final EntregaService entregaService;
+    private final UsuarioService usuarioService;
+    private final FilaService filaService;
 
-    public FamiliaController(FamiliaService familiaService, EntregaService entregaService) {
+    public FamiliaController(FamiliaService familiaService,
+                             EntregaService entregaService,
+                             UsuarioService usuarioService,
+                             FilaService filaService) {
         this.familiaService = familiaService;
         this.entregaService = entregaService;
+        this.usuarioService = usuarioService;
+        this.filaService = filaService;
     }
 
     @GetMapping
@@ -50,8 +60,22 @@ public class FamiliaController {
         }
 
         try {
-            familiaService.salvar(familia);
-            redirectAttributes.addFlashAttribute("sucesso", "Família salva com sucesso.");
+            Familia salva = familiaService.salvar(familia);
+
+            if (usuarioService.buscarPorFamiliaId(salva.getId()).isEmpty()) {
+                String senhaAcesso = usuarioService.criarAcessoFamilia(salva);
+                salva = usuarioService.gerarSenhaRetiradaSeNecessario(salva, filaService);
+
+                redirectAttributes.addFlashAttribute("senhaAcessoGerada", senhaAcesso);
+                redirectAttributes.addFlashAttribute("cpfFormatado", CpfUtil.formatar(salva.getCpf()));
+                if (salva.getNumeroSenha() != null) {
+                    redirectAttributes.addFlashAttribute("senhaRetirada", salva.getNumeroSenha());
+                }
+                redirectAttributes.addFlashAttribute("sucesso",
+                        "Família salva com sucesso. Informe à família o CPF, a senha de acesso e a senha de retirada.");
+            } else {
+                redirectAttributes.addFlashAttribute("sucesso", "Família salva com sucesso.");
+            }
         } catch (IllegalArgumentException ex) {
             model.addAttribute("erro", ex.getMessage());
             return "familias/form";
@@ -63,6 +87,7 @@ public class FamiliaController {
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("familia", familiaService.buscarPorId(id));
+        usuarioService.buscarPorFamiliaId(id).ifPresent(u -> model.addAttribute("usuario", u));
         return "familias/form";
     }
 

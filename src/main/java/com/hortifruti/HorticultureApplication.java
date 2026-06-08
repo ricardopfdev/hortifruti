@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HortifrutiApplication {
+public class HorticultureApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HortifrutiApplication.class, args);
+        SpringApplication.run(HorticultureApplication.class, args);
     }
 
 }

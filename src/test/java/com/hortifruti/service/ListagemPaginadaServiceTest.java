@@ -92,7 +92,10 @@ class ListagemPaginadaServiceTest {
         familia.setNomeCompleto(nome);
         familia.setCpf(cpf);
         familia.setTelefone("11999999999");
-        familia.setEndereco("Rua Teste, 1");
+        familia.setEndereco("Rua Teste");
+        familia.setNumero("1");
+        familia.setBairro("Centro");
+        familia.setCidade("São Paulo");
         familia.setQuantidadeMoradores(2);
         familia.setAtiva(true);
         return familia;

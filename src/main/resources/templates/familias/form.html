@@ -47,11 +47,34 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Endereço *</label>
-                    <input type="text" class="form-control" th:field="*{endereco}"
-                           th:classappend="${#fields.hasErrors('endereco')} ? 'is-invalid'">
-                    <div class="invalid-feedback" th:errors="*{endereco}"></div>
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Endereço (rua/logradouro) *</label>
+                        <input type="text" class="form-control" th:field="*{endereco}"
+                               th:classappend="${#fields.hasErrors('endereco')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{endereco}"></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Número *</label>
+                        <input type="text" class="form-control" th:field="*{numero}"
+                               th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{numero}"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Bairro *</label>
+                        <input type="text" class="form-control" th:field="*{bairro}"
+                               th:classappend="${#fields.hasErrors('bairro')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{bairro}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cidade *</label>
+                        <input type="text" class="form-control" th:field="*{cidade}"
+                               th:classappend="${#fields.hasErrors('cidade')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{cidade}"></div>
+                    </div>
                 </div>
 
                 <div th:if="${familia.id != null}" class="alert alert-info">
@@ -59,9 +82,33 @@
                         Status na fila: <strong th:text="${familia.statusFila}"></strong> |
                         Prioridade: <strong th:text="${familia.prioridade}"></strong>
                         <span th:if="${familia.numeroSenha != null}">
-                            | Senha: <strong th:text="${T(String).format('%03d', familia.numeroSenha)}"></strong>
+                            | Senha da fila: <strong th:text="${T(java.lang.String).format('%03d', familia.numeroSenha)}"></strong>
                         </span>
                     </small>
+                </div>
+
+                <div th:if="${usuario != null}" class="alert alert-warning">
+                    <h6 class="alert-heading mb-2"><i class="bi bi-key"></i> Acesso ao sistema</h6>
+                    <div class="row small">
+                        <div class="col-md-4">
+                            <strong>Usuário (CPF):</strong>
+                            <span th:text="${T(com.hortifruti.validation.CpfUtil).formatar(usuario.username)}"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Senha de acesso:</strong>
+                            <span th:text="${usuario.senhaAcesso}"></span>
+                        </div>
+                        <div class="col-md-4" th:if="${familia.numeroSenha != null}">
+                            <strong>Senha de retirada:</strong>
+                            <span th:text="${T(java.lang.String).format('%03d', familia.numeroSenha)}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${usuario == null and familia.id == null}" class="alert alert-info small mb-0">
+                    <i class="bi bi-info-circle"></i>
+                    Ao salvar, serão geradas automaticamente a senha de acesso (5 caracteres: 1 letra e 4 números)
+                    e a senha de retirada na fila.
                 </div>
 
                 <button type="submit" class="btn btn-success">

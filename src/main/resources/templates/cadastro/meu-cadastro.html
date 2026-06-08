@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Meu Cadastro', 'meu-cadastro', ~{::section})}">
+<body>
+<section>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-person-vcard"></i> Dados do seu cadastro</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered mb-0">
+                <tbody>
+                <tr>
+                    <th class="bg-light" style="width: 30%;">Nome completo</th>
+                    <td th:text="${familia.nomeCompleto}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">CPF</th>
+                    <td th:text="${cpfFormatado}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Telefone</th>
+                    <td th:text="${familia.telefone}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Quantidade de moradores</th>
+                    <td th:text="${familia.quantidadeMoradores}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Endereço</th>
+                    <td th:text="${T(com.hortifruti.validation.EnderecoUtil).formatarCompleto(familia)}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Família ativa</th>
+                    <td>
+                        <span th:if="${familia.ativa}" class="badge text-bg-success">Sim</span>
+                        <span th:unless="${familia.ativa}" class="badge text-bg-secondary">Não</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Data do cadastro</th>
+                    <td th:text="${#temporals.format(familia.dataCadastro, 'dd/MM/yyyy')}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Status na fila</th>
+                    <td>
+                        <span th:if="${familia.statusFila == 'NA_FILA'}" class="badge text-bg-warning">Na fila</span>
+                        <span th:if="${familia.statusFila == 'ATENDIDO'}" class="badge text-bg-success">Atendido</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Prioridade</th>
+                    <td th:text="${familia.prioridade}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Senha da fila</th>
+                    <td>
+                        <span th:if="${familia.numeroSenha != null}"
+                              class="badge text-bg-primary"
+                              th:text="${T(java.lang.String).format('%03d', familia.numeroSenha)}"></span>
+                        <span th:if="${familia.numeroSenha == null}" class="text-muted">Ainda não gerada</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Usuário de acesso</th>
+                    <td th:text="${cpfFormatado}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Senha de acesso</th>
+                    <td><strong th:text="${usuario.senhaAcesso}"></strong></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

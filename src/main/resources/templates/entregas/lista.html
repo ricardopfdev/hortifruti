@@ -70,7 +70,7 @@
                     <td th:text="${e.id}"></td>
                     <td>
                         <span class="badge text-bg-primary"
-                              th:text="${T(String).format('%03d', e.senha)}"></span>
+                              th:text="${T(java.lang.String).format('%03d', e.senha)}"></span>
                     </td>
                     <td th:text="${e.familia.nomeCompleto}"></td>
                     <td th:text="${e.familia.cpf}"></td>

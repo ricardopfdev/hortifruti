@@ -21,7 +21,7 @@
                 <div class="info-box-content">
                     <span class="info-box-text">Próxima Senha</span>
                     <span class="info-box-number"
-                          th:text="${T(String).format('%03d', proximaSenha)}">001</span>
+                          th:text="${T(java.lang.String).format('%03d', proximaSenha)}">001</span>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                         <b>Senha:</b>
                         <span th:if="${f.numeroSenha != null}"
                               class="badge text-bg-primary fs-5"
-                              th:text="${T(String).format('%03d', f.numeroSenha)}"></span>
+                              th:text="${T(java.lang.String).format('%03d', f.numeroSenha)}"></span>
                         <span th:if="${f.numeroSenha == null}" class="text-muted">Não gerada</span>
                     </p>
                     <span th:if="${f.statusFila == 'NA_FILA'}" class="badge text-bg-warning">Na fila</span>

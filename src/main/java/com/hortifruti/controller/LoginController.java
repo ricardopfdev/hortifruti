@@ -13,7 +13,8 @@ public class LoginController {
                         @RequestParam(value = "logout", required = false) String logout,
                         Model model) {
         if (error != null) {
-            model.addAttribute("erro", "Usuário ou senha inválidos.");
+            model.addAttribute("erro",
+                    "Usuário ou senha inválidos. Famílias: CPF + senha de 5 caracteres. Admin e atendentes: usuário e senha completos.");
         }
         if (logout != null) {
             model.addAttribute("sucesso", "Logout realizado com sucesso.");

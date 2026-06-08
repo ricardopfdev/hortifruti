@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="HortifrutiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" />
+    <option name="ACTIVE_PROFILES" value="local" />
     <module name="hortifruti" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hortifruti.HortifrutiApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hortifruti.HorticultureApplication" />
     <extension name="net.ashald.envfile">
       <option name="ENABLED" value="true" />
       <option name="IS_SUBST" value="false" />

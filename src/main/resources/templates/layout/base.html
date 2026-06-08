@@ -53,7 +53,11 @@
 
     <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <div class="sidebar-brand">
-            <a th:href="@{/dashboard}" class="brand-link">
+            <a sec:authorize="hasRole('FAMILIA')" th:href="@{/meu-cadastro}" class="brand-link">
+                <i class="bi bi-flower1 brand-image fs-4 ms-2"></i>
+                <span class="brand-text fw-light">HortiFrúti</span>
+            </a>
+            <a sec:authorize="!hasRole('FAMILIA')" th:href="@{/dashboard}" class="brand-link">
                 <i class="bi bi-flower1 brand-image fs-4 ms-2"></i>
                 <span class="brand-text fw-light">HortiFrúti</span>
             </a>
@@ -61,7 +65,14 @@
         <div class="sidebar-wrapper">
             <nav class="mt-2">
                 <ul class="nav sidebar-menu flex-column" role="navigation">
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('FAMILIA')">
+                        <a th:href="@{/meu-cadastro}" class="nav-link"
+                           th:classappend="${menu == 'meu-cadastro'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-person-vcard"></i>
+                            <p>Meu Cadastro</p>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ATENDENTE')">
                         <a th:href="@{/dashboard}" class="nav-link"
                            th:classappend="${menu == 'dashboard'} ? ' active' : ''">
                             <i class="nav-icon bi bi-speedometer"></i>
@@ -75,28 +86,35 @@
                             <p>Famílias</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/atendentes}" class="nav-link"
+                           th:classappend="${menu == 'atendentes'} ? ' active' : ''">
+                            <i class="nav-icon bi bi-person-gear"></i>
+                            <p>Atendentes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ATENDENTE')">
                         <a th:href="@{/fila}" class="nav-link"
                            th:classappend="${menu == 'fila'} ? ' active' : ''">
                             <i class="nav-icon bi bi-list-ol"></i>
                             <p>Fila de Atendimento</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ATENDENTE')">
                         <a th:href="@{/fila/painel}" class="nav-link"
                            th:classappend="${menu == 'painel'} ? ' active' : ''">
                             <i class="nav-icon bi bi-display"></i>
                             <p>Painel de Senhas</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ATENDENTE')">
                         <a th:href="@{/fila/baixa}" class="nav-link"
                            th:classappend="${menu == 'baixa'} ? ' active' : ''">
                             <i class="nav-icon bi bi-ticket-perforated"></i>
                             <p>Baixa por Senha</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'ATENDENTE')">
                         <a th:href="@{/entregas}" class="nav-link"
                            th:classappend="${menu == 'entregas'} ? ' active' : ''">
                             <i class="nav-icon bi bi-box-seam"></i>

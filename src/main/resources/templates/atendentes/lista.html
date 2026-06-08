@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Atendentes', 'atendentes', ~{::section})}">
+<body>
+<section>
+    <div th:if="${senhaGerada}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading"><i class="bi bi-key"></i> Senha de acesso do atendente</h6>
+        <p class="mb-1"><strong>Usuário:</strong> <span th:text="${usernameGerado}"></span></p>
+        <p class="mb-0"><strong>Senha:</strong> <span th:text="${senhaGerada}"></span></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <a th:href="@{/atendentes/novo}" class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Novo atendente
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Usuário (login)</th>
+                        <th>Ativo</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="a : ${atendentes}">
+                        <td th:text="${a.nomeCompleto}"></td>
+                        <td th:text="${a.username}"></td>
+                        <td>
+                            <span th:if="${a.ativo}" class="badge text-bg-success">Sim</span>
+                            <span th:unless="${a.ativo}" class="badge text-bg-secondary">Não</span>
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <a th:href="@{'/atendentes/editar/' + ${a.id}}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <form th:action="@{'/atendentes/deletar/' + ${a.id}}" method="post" class="d-inline"
+                                  onsubmit="return confirm('Excluir este atendente?');">
+                                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(atendentes)}">
+                        <td colspan="4" class="text-center text-muted py-4">Nenhum atendente cadastrado.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

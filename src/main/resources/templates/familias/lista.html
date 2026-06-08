@@ -3,6 +3,17 @@
       th:replace="~{layout/base :: layout('Famílias', 'familias', ~{::section})}">
 <body>
 <section>
+    <div th:if="${senhaAcessoGerada}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading"><i class="bi bi-key"></i> Senhas geradas para a família</h6>
+        <p class="mb-1"><strong>Usuário (CPF):</strong> <span th:text="${cpfFormatado}"></span></p>
+        <p class="mb-1"><strong>Senha de acesso (login):</strong> <span th:text="${senhaAcessoGerada}"></span></p>
+        <p class="mb-0" th:if="${senhaRetirada != null}">
+            <strong>Senha de retirada (fila):</strong>
+            <span th:text="${T(java.lang.String).format('%03d', senhaRetirada)}"></span>
+        </p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <a th:href="@{/familias/novo}" class="btn btn-success">
             <i class="bi bi-plus-lg"></i> Nova Família
@@ -88,7 +99,7 @@
                     <td>
                         <span th:if="${f.numeroSenha != null}"
                               class="badge text-bg-primary"
-                              th:text="${T(String).format('%03d', f.numeroSenha)}"></span>
+                              th:text="${T(java.lang.String).format('%03d', f.numeroSenha)}"></span>
                         <span th:if="${f.numeroSenha == null}" class="text-muted">—</span>
                     </td>
                     <td class="text-end text-nowrap">

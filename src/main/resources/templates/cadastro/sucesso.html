@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro realizado | HortiFrúti</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/adminlte/css/adminlte.css}">
+</head>
+<body class="login-page bg-body-secondary">
+
+<div class="login-box" style="width: 560px; max-width: 95vw;">
+    <div class="login-logo">
+        <span class="fs-3"><i class="bi bi-flower1 text-success"></i> <b>Horti</b>Frúti</span>
+    </div>
+
+    <div class="card">
+        <div class="card-body login-card-body">
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i> Cadastro realizado com sucesso!
+            </div>
+
+            <p class="text-muted small">
+                Guarde os dados abaixo. Use o CPF e a senha para entrar no sistema e consultar seu cadastro a qualquer momento.
+            </p>
+
+            <table class="table table-sm table-bordered mb-3">
+                <tbody>
+                <tr>
+                    <th class="bg-light" style="width: 40%;">Nome</th>
+                    <td th:text="${familia.nomeCompleto}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">CPF</th>
+                    <td th:text="${cpfFormatado}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Telefone</th>
+                    <td th:text="${familia.telefone}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Moradores</th>
+                    <td th:text="${familia.quantidadeMoradores}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Endereço completo</th>
+                    <td th:text="${enderecoCompleto != null ? enderecoCompleto : T(com.hortifruti.validation.EnderecoUtil).formatarCompleto(familia)}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Data do cadastro</th>
+                    <td th:text="${#temporals.format(familia.dataCadastro, 'dd/MM/yyyy')}"></td>
+                </tr>
+                <tr>
+                    <th class="bg-light">Usuário de acesso</th>
+                    <td th:text="${cpfFormatado}"></td>
+                </tr>
+                <tr class="table-warning">
+                    <th class="bg-light">Senha de acesso (login)</th>
+                    <td><strong class="fs-5" th:text="${senhaGerada}"></strong></td>
+                </tr>
+                <tr th:if="${senhaRetirada != null}" class="table-info">
+                    <th class="bg-light">Senha de retirada (fila)</th>
+                    <td><strong class="fs-5" th:text="${#numbers.formatInteger(senhaRetirada, 3)}"></strong></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a th:href="@{/login}" class="btn btn-success w-100">
+                <i class="bi bi-box-arrow-in-right"></i> Ir para o login
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

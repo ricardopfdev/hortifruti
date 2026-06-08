@@ -84,7 +84,7 @@
                             <td>
                                 <span th:if="${f.numeroSenha != null}"
                                       class="badge text-bg-primary"
-                                      th:text="${T(String).format('%03d', f.numeroSenha)}"></span>
+                                      th:text="${T(java.lang.String).format('%03d', f.numeroSenha)}"></span>
                                 <span th:if="${f.numeroSenha == null}" class="text-muted">—</span>
                             </td>
                             <td>

@@ -23,15 +23,18 @@
                 <span th:text="${caminho}">/caminho</span>
             </p>
             <div class="d-flex flex-wrap justify-content-center gap-2">
-                <a sec:authorize="isAuthenticated()" th:href="@{/dashboard}" class="btn btn-success">
+                <a sec:authorize="hasRole('FAMILIA')" th:href="@{/meu-cadastro}" class="btn btn-success">
+                    <i class="bi bi-person-vcard"></i> Meu cadastro
+                </a>
+                <a sec:authorize="hasAnyRole('ADMIN','ATENDENTE')" th:href="@{/dashboard}" class="btn btn-success">
                     <i class="bi bi-house"></i> Ir ao Dashboard
                 </a>
                 <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-success">
-                    <i class="bi bi-box-arrow-in-right"></i> Fazer Login
+                    <i class="bi bi-box-arrow-in-right"></i> Fazer login
                 </a>
-                <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
-                    <i class="bi bi-arrow-left"></i> Voltar
-                </button>
+                <a sec:authorize="isAuthenticated()" th:href="@{/login}" class="btn btn-outline-secondary">
+                    <i class="bi bi-box-arrow-in-right"></i> Ir ao login
+                </a>
             </div>
         </div>
     </div>

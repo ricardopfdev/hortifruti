@@ -1,8 +1,8 @@
-spring.datasource.url=jdbc:postgresql://localhost:5432/hortifruti
-spring.datasource.username=postgres
-spring.datasource.password=SUA_SENHA_AQUI
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/hortifruti}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:SUA_SENHA_AQUI}
 
-hortifruti.security.admin.username=admin
-hortifruti.security.admin.password=admin123
-hortifruti.security.atendente.username=atendente
-hortifruti.security.atendente.password=atendente123
+hortifruti.security.admin.username=${HORTIFRUTI_ADMIN_USERNAME:admin}
+hortifruti.security.admin.password=${HORTIFRUTI_ADMIN_PASSWORD:admin123}
+hortifruti.security.atendente.username=${HORTIFRUTI_ATENDENTE_USERNAME:atendente}
+hortifruti.security.atendente.password=${HORTIFRUTI_ATENDENTE_PASSWORD:atendente123}

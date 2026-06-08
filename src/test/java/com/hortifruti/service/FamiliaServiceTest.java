@@ -68,7 +68,10 @@ class FamiliaServiceTest {
         familia.setNomeCompleto("Família Teste");
         familia.setCpf(cpf);
         familia.setTelefone("11999999999");
-        familia.setEndereco("Rua Teste, 1");
+        familia.setEndereco("Rua Teste");
+        familia.setNumero("100");
+        familia.setBairro("Centro");
+        familia.setCidade("São Paulo");
         familia.setQuantidadeMoradores(3);
         familia.setAtiva(true);
         return familia;

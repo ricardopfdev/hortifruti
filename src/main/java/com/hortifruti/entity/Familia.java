@@ -31,6 +31,18 @@ public class Familia {
     @Column(nullable = false)
     private String endereco;
 
+    @NotBlank(message = "Número é obrigatório")
+    @Column(nullable = false, length = 20)
+    private String numero;
+
+    @NotBlank(message = "Bairro é obrigatório")
+    @Column(nullable = false)
+    private String bairro;
+
+    @NotBlank(message = "Cidade é obrigatória")
+    @Column(nullable = false)
+    private String cidade;
+
     @Min(value = 1, message = "A família deve ter pelo menos 1 morador")
     @Column(nullable = false)
     private Integer quantidadeMoradores;
@@ -90,6 +102,30 @@ public class Familia {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public Integer getQuantidadeMoradores() {

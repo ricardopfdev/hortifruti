@@ -47,9 +47,63 @@ class SecurityWebMvcTest {
     }
 
     @Test
+    void cadastroPageEhPublica() throws Exception {
+        mockMvc.perform(get("/cadastro"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "FAMILIA")
+    void meuCadastroBloqueadoSemUsuarioNoBanco() throws Exception {
+        mockMvc.perform(get("/meu-cadastro"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(roles = "FAMILIA")
+    void dashboardBloqueadoParaFamilia() throws Exception {
+        mockMvc.perform(get("/dashboard"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void cadastroRevisarPageEhPublica() throws Exception {
+        mockMvc.perform(get("/cadastro/revisar"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/cadastro"));
+    }
+
+    @Test
+    void recuperarSenhaPageEhPublica() throws Exception {
+        mockMvc.perform(get("/recuperar-senha"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @WithMockUser(roles = "ATENDENTE")
     void familiasBloqueadoParaAtendente() throws Exception {
         mockMvc.perform(get("/familias"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void atendentesAcessivelParaAdmin() throws Exception {
+        mockMvc.perform(get("/atendentes"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ATENDENTE")
+    void atendentesBloqueadoParaAtendente() throws Exception {
+        mockMvc.perform(get("/atendentes"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "FAMILIA")
+    void atendentesBloqueadoParaFamilia() throws Exception {
+        mockMvc.perform(get("/atendentes"))
                 .andExpect(status().isForbidden());
     }
 }

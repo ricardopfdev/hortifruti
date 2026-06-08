@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(${novo} ? 'Novo Atendente' : 'Editar Atendente', 'atendentes', ~{::section})}">
+<body>
+<section>
+    <div th:if="${senhaGerada}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading"><i class="bi bi-key"></i> Nova senha de acesso</h6>
+        <p class="mb-1"><strong>Usuário:</strong> <span th:text="${usernameGerado}"></span></p>
+        <p class="mb-0"><strong>Senha:</strong> <span th:text="${senhaGerada}"></span></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form th:action="@{/atendentes/salvar}" th:object="${atendente}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Nome completo *</label>
+                            <input type="text" class="form-control" th:field="*{nomeCompleto}"
+                                   th:classappend="${#fields.hasErrors('nomeCompleto')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:errors="*{nomeCompleto}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuário de login *</label>
+                            <input type="text" class="form-control" th:field="*{username}"
+                                   autocomplete="off" placeholder="ex: maria.silva"
+                                   th:readonly="${!novo}"
+                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:errors="*{username}"></div>
+                            <div class="form-text" th:if="${novo}">
+                                Letras, números, ponto, hífen ou underline (mín. 3 caracteres).
+                            </div>
+                            <div class="form-text" th:unless="${novo}">
+                                O usuário de login não pode ser alterado após o cadastro.
+                            </div>
+                        </div>
+
+                        <div class="mb-3" th:unless="${novo}">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" th:field="*{ativo}" id="ativo">
+                                <label class="form-check-label" for="ativo">Atendente ativo</label>
+                            </div>
+                        </div>
+
+                        <div th:if="${novo}" class="alert alert-info small">
+                            <i class="bi bi-info-circle"></i>
+                            Ao salvar, uma senha de acesso será gerada automaticamente.
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Salvar
+                        </button>
+                        <a th:href="@{/atendentes}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5" th:unless="${novo}">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-key"></i> Senha de acesso
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">
+                        Somente o administrador pode alterar a senha dos atendentes.
+                    </p>
+
+                    <div class="alert alert-light border mb-3">
+                        <strong>Senha atual:</strong>
+                        <span class="ms-1" th:text="${atendente.senhaAcesso}"></span>
+                    </div>
+
+                    <form th:action="@{'/atendentes/definir-senha/' + ${atendente.id}}" method="post" class="mb-3">
+                        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <label class="form-label">Definir nova senha</label>
+                        <div class="input-group mb-2">
+                            <input type="text" name="novaSenha" class="form-control" minlength="6"
+                                   placeholder="Mínimo 6 caracteres" required>
+                            <button type="submit" class="btn btn-warning">
+                                Alterar
+                            </button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{'/atendentes/redefinir-senha/' + ${atendente.id}}" method="post">
+                        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-outline-warning w-100">
+                            <i class="bi bi-arrow-repeat"></i> Gerar senha aleatória
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

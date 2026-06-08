@@ -22,6 +22,8 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long> {
 
     boolean existsByCpfAndIdNot(String cpf, Long id);
 
+    Optional<Familia> findByCpf(String cpf);
+
     Optional<Familia> findByNumeroSenhaAndStatusFila(Integer numeroSenha, String statusFila);
 
     @Query("SELECT COALESCE(MAX(f.prioridade), 0) FROM Familia f")

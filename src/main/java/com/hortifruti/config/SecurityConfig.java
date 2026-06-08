@@ -1,17 +1,15 @@
 package com.hortifruti.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,11 +18,15 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                            AuthenticationSuccessHandler authenticationSuccessHandler) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/fila/painel", "/adminlte/**", "/error", "/erro/**").permitAll()
-                        .requestMatchers("/familias/**", "/fila/reiniciar").hasRole("ADMIN")
+                        .requestMatchers("/login", "/cadastro", "/cadastro/**",
+                                "/recuperar-senha", "/recuperar-senha/**", "/fila/painel",
+                                "/adminlte/**", "/error", "/erro/**").permitAll()
+                        .requestMatchers("/meu-cadastro").hasRole("FAMILIA")
+                        .requestMatchers("/familias/**", "/fila/reiniciar", "/atendentes/**").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("ADMIN", "ATENDENTE"))
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
@@ -33,7 +35,7 @@ public class SecurityConfig {
                         }))
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .successHandler(authenticationSuccessHandler)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
@@ -43,30 +45,47 @@ public class SecurityConfig {
     }
 
     @Bean
-    UserDetailsService userDetailsService(
-            @Value("${hortifruti.security.admin.username}") String adminUsername,
-            @Value("${hortifruti.security.admin.password}") String adminPassword,
-            @Value("${hortifruti.security.atendente.username}") String atendenteUsername,
-            @Value("${hortifruti.security.atendente.password}") String atendentePassword,
-            PasswordEncoder passwordEncoder) {
-
-        UserDetails admin = User.builder()
-                .username(adminUsername)
-                .password(passwordEncoder.encode(adminPassword))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails atendente = User.builder()
-                .username(atendenteUsername)
-                .password(passwordEncoder.encode(atendentePassword))
-                .roles("ATENDENTE")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, atendente);
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            boolean isFamilia = authentication.getAuthorities().stream()
+                    .anyMatch(a -> "ROLE_FAMILIA".equals(a.getAuthority()));
+            if (isFamilia) {
+                response.sendRedirect("/meu-cadastro");
+            } else {
+                response.sendRedirect("/dashboard");
+            }
+        };
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    PasswordEncoder staffPasswordEncoder() {
+        return new StaffPasswordEncoder();
+    }
+
+    @Bean
+    PasswordEncoder familiaPasswordEncoder() {
+        return new SenhaAcessoPasswordEncoder();
+    }
+
+    @Bean
+    @Primary
+    PasswordEncoder passwordEncoder(@Qualifier("staffPasswordEncoder") PasswordEncoder staff,
+                                    @Qualifier("familiaPasswordEncoder") PasswordEncoder familia) {
+        PasswordEncoder delegating = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return staff.encode(rawPassword);
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                if (encodedPassword != null && encodedPassword.startsWith("{")) {
+                    return delegating.matches(rawPassword, encodedPassword);
+                }
+                return staff.matches(rawPassword, encodedPassword)
+                        || familia.matches(rawPassword, encodedPassword);
+            }
+        };
     }
 }
