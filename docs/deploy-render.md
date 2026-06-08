@@ -2,19 +2,18 @@
 
 Guia para colocar o HortiFrúti online usando [Render](https://render.com) e o repositório GitHub.
 
+> O Render **não mostra Java** na lista de linguagens. Use **Docker** — o projeto já inclui `Dockerfile` na raiz.
+
 ## Opção A — Blueprint (mais fácil)
 
-1. Faça push deste repositório no GitHub (já deve estar em `ricardopfdev/hortifruti`).
-2. No Render: **New** → **Blueprint**.
-3. Conecte o GitHub e selecione o repositório `hortifruti`.
-4. O Render lê o arquivo `render.yaml` e cria:
-   - banco **Postgres**
-   - **Web Service** Java
-5. Clique em **Apply**.
-6. Aguarde o build (5–10 min na primeira vez).
-7. Anote a URL gerada (ex.: `https://hortifruti.onrender.com`).
+1. Repositório no GitHub: `ricardopfdev/hortifruti`
+2. No Render: **New** → **Blueprint**
+3. Conecte o GitHub e selecione `hortifruti`
+4. O Render lê `render.yaml` e cria **Postgres** + **Web Service (Docker)**
+5. **Apply** → aguarde o build (5–15 min na primeira vez)
+6. URL: ex. `https://hortifruti.onrender.com`
 
-As senhas de admin e atendente são geradas automaticamente. Veja em **Environment** do Web Service:
+Senhas geradas automaticamente em **Environment**:
 
 - `HORTIFRUTI_ADMIN_PASSWORD`
 - `HORTIFRUTI_ATENDENTE_PASSWORD`
@@ -24,14 +23,10 @@ As senhas de admin e atendente são geradas automaticamente. Veja em **Environme
 ### 1. Criar Postgres
 
 1. **New** → **Postgres**
-2. Nome: `hortifruti-db`
-3. Database: `hortifruti`
-4. Plano: **Free** (ou pago, se preferir)
-5. **Create Database**
+2. Nome: `hortifruti-db` · Database: `hortifruti` · Plano: **Free**
+3. **Create Database**
 
-Anote em **Connections** (Internal):
-
-- Host, Port, Database, User, Password
+Anote em **Connections** (Internal): Host, Port, Database, User, Password.
 
 ### 2. Criar Web Service
 
@@ -42,54 +37,58 @@ Anote em **Connections** (Internal):
 | Campo | Valor |
 |-------|--------|
 | Name | `hortifruti` |
-| Runtime | **Java** |
-| Build Command | `./mvnw clean package -DskipTests` |
-| Start Command | `java -jar target/hortifruti-0.0.1-SNAPSHOT.jar` |
+| Language | **Docker** |
+| Dockerfile | `./Dockerfile` (padrão) |
+| Build Command | *(deixe vazio — o Docker cuida disso)* |
+| Start Command | *(deixe vazio)* |
 
 ### 3. Variáveis de ambiente
 
-Em **Environment** do Web Service, adicione:
+Em **Environment** do Web Service:
 
 | Variável | Valor |
 |----------|--------|
 | `SPRING_PROFILES_ACTIVE` | `prod` |
-| `DB_HOST` | host do Postgres (Internal) |
+| `DB_HOST` | host Internal do Postgres |
 | `DB_PORT` | `5432` |
 | `DB_NAME` | `hortifruti` |
 | `SPRING_DATASOURCE_USERNAME` | usuário do Postgres |
 | `SPRING_DATASOURCE_PASSWORD` | senha do Postgres |
 | `HORTIFRUTI_ADMIN_USERNAME` | `admin` |
-| `HORTIFRUTI_ADMIN_PASSWORD` | senha forte (ex.: 12+ caracteres) |
+| `HORTIFRUTI_ADMIN_PASSWORD` | senha forte |
 | `HORTIFRUTI_ATENDENTE_USERNAME` | `atendente` |
 | `HORTIFRUTI_ATENDENTE_PASSWORD` | senha forte |
 
 ### 4. Deploy
 
-Clique em **Create Web Service** e aguarde o build.
+**Create Web Service** → aguarde build e deploy.
 
 ## Depois do deploy
 
-- Acesse a URL do Render (ex.: `https://hortifruti.onrender.com/login`).
-- Login admin: usuário `admin` + senha definida em `HORTIFRUTI_ADMIN_PASSWORD`.
-- Cadastros feitos online ficam no Postgres **do Render**, não no seu PC.
+- Acesse `https://SEU-SERVICO.onrender.com/login`
+- Admin: `admin` + `HORTIFRUTI_ADMIN_PASSWORD`
+- Dados online ficam no Postgres **do Render**, não no seu PC
 
-## Plano gratuito — o que esperar
+## Plano gratuito
 
-- **Cold start:** após ~15 min sem acesso, a primeira abertura pode demorar ~1 minuto.
-- **Postgres free:** expira após 90 dias (Render avisa antes); faça backup se for usar em produção real.
-- **HTTPS:** Render já inclui certificado SSL na URL `.onrender.com`.
+- **Cold start:** ~1 min após ficar parado
+- **Postgres free:** expira em 90 dias (Render avisa)
+- **HTTPS:** incluso em `.onrender.com`
 
 ## Problemas comuns
 
 | Erro | Solução |
 |------|---------|
-| Build falhou | Veja **Logs** → Build; confira Java 21 (`system.properties`) |
-| App não sobe | Logs → Runtime; confira variáveis `DB_*` e senha do Postgres |
-| 502 / timeout | Aguarde cold start ou aumente o plano |
-| Login não funciona | Confira `HORTIFRUTI_ADMIN_PASSWORD` no painel Environment |
+| Build Docker falhou | Logs → Build; confira se `Dockerfile` está na raiz do repo |
+| App não sobe | Logs → Runtime; confira `DB_*` e senha Postgres |
+| 502 / timeout | Cold start ou aumente o plano |
+| Login falha | Confira `HORTIFRUTI_ADMIN_PASSWORD` |
 
-## Arquivos de deploy no projeto
+## Arquivos de deploy
 
-- `render.yaml` — blueprint Render
-- `application-prod.properties` — perfil produção (porta, SSL, cache)
-- `system.properties` — Java 21
+| Arquivo | Função |
+|---------|--------|
+| `Dockerfile` | Build e execução Java 21 |
+| `.dockerignore` | Arquivos ignorados no build |
+| `render.yaml` | Blueprint Render |
+| `application-prod.properties` | Perfil produção |
