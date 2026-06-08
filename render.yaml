@@ -1,0 +1,44 @@
+databases:
+  - name: hortifruti-db
+    databaseName: hortifruti
+    user: hortifruti
+    plan: free
+
+services:
+  - type: web
+    name: hortifruti
+    runtime: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/hortifruti-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_HOST
+        fromDatabase:
+          name: hortifruti-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: hortifruti-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: hortifruti-db
+          property: database
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: hortifruti-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: hortifruti-db
+          property: password
+      - key: HORTIFRUTI_ADMIN_USERNAME
+        value: admin
+      - key: HORTIFRUTI_ADMIN_PASSWORD
+        generateValue: true
+      - key: HORTIFRUTI_ATENDENTE_USERNAME
+        value: atendente
+      - key: HORTIFRUTI_ATENDENTE_PASSWORD
+        generateValue: true

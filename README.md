@@ -22,6 +22,7 @@ Documentação detalhada em [`docs/`](docs/):
 - [Regras de negócio](docs/regras-negocio.md)
 - [Modelo de banco de dados](docs/modelo-banco.md)
 - [Perfis de acesso e rotas](docs/perfis-e-rotas.md)
+- [Publicar no Render (online)](docs/deploy-render.md)
 
 ## Perfis de usuário
 
