@@ -18,8 +18,9 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">CPF *</label>
-                        <input type="text" class="form-control" th:field="*{cpf}" maxlength="14"
-                               inputmode="numeric" placeholder="000.000.000-00"
+                        <input type="text" class="form-control" th:field="*{cpf}" data-cpf-input
+                               maxlength="14" inputmode="numeric" placeholder="000.000.000-00"
+                               autocomplete="off"
                                th:classappend="${#fields.hasErrors('cpf')} ? 'is-invalid'">
                         <div class="invalid-feedback" th:errors="*{cpf}"></div>
                         <div class="form-text">Informe 11 dígitos (com ou sem pontuação).</div>
@@ -119,6 +120,7 @@
             </form>
         </div>
     </div>
+    <script th:src="@{/js/cpf-input.js}"></script>
 </section>
 </body>
 </html>

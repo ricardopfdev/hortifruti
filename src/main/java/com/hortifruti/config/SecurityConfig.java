@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/cadastro", "/cadastro/**",
                                 "/recuperar-senha", "/recuperar-senha/**", "/fila/painel",
-                                "/adminlte/**", "/error", "/erro/**").permitAll()
+                                "/adminlte/**", "/js/**", "/error", "/erro/**").permitAll()
                         .requestMatchers("/meu-cadastro").hasRole("FAMILIA")
                         .requestMatchers("/familias/**", "/fila/reiniciar", "/atendentes/**").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("ADMIN", "ATENDENTE"))
