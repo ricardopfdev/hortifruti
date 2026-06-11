@@ -21,6 +21,8 @@ public interface EntregaRepository extends JpaRepository<Entrega, Long> {
 
     boolean existsByFamiliaId(Long familiaId);
 
+    void deleteByFamilia_Id(Long familiaId);
+
     @Query("""
             SELECT e FROM Entrega e JOIN e.familia f
             WHERE (:busca = '' OR LOWER(f.nomeCompleto) LIKE LOWER(CONCAT('%', :busca, '%'))

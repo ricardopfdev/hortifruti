@@ -82,10 +82,7 @@ public class FamiliaService {
         if (!familiaRepository.existsById(id)) {
             throw new IllegalArgumentException("Família não encontrada");
         }
-        if (entregaRepository.existsByFamiliaId(id)) {
-            throw new IllegalArgumentException(
-                    "Não é possível excluir família com entregas registradas. Desative-a em vez de excluir.");
-        }
+        entregaRepository.deleteByFamilia_Id(id);
         familiaRepository.deleteById(id);
     }
 

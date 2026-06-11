@@ -63,6 +63,15 @@ class FamiliaServiceTest {
         assertEquals("52998224725", salva.getCpf());
     }
 
+    @Test
+    void deletaFamilia() {
+        Familia salva = familiaService.salvar(familiaValida("39053344705"));
+
+        familiaService.deletar(salva.getId());
+
+        assertThrows(IllegalArgumentException.class, () -> familiaService.buscarPorId(salva.getId()));
+    }
+
     private Familia familiaValida(String cpf) {
         Familia familia = new Familia();
         familia.setNomeCompleto("Família Teste");
