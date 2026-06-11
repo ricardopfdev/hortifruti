@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="script">
+<script>
 (function () {
     function sanitize(input) {
         input.value = input.value.replace(/\D/g, '').slice(0, 11);
@@ -20,3 +25,7 @@
 
     document.querySelectorAll('[data-cpf-input]').forEach(bindCpfInput);
 })();
+</script>
+</th:block>
+</body>
+</html>
